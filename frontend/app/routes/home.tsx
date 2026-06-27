@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
+import { useNavigate, useParams } from 'react-router'
 import type { Route } from './+types/home'
 import {
   BriefcaseBusiness,
@@ -66,6 +67,22 @@ type EntityConfig = {
 }
 
 const API_BASE = 'http://localhost:8080/api'
+
+const entityKeyByPath: Record<string, EntityKey> = {
+  companies: 'companies',
+  students: 'students',
+  jobs: 'jobs',
+  applications: 'applications',
+  'company-users': 'companyUsers',
+}
+
+const pathByEntityKey: Record<EntityKey, string> = {
+  companies: 'companies',
+  students: 'students',
+  jobs: 'jobs',
+  applications: 'applications',
+  companyUsers: 'company-users',
+}
 
 const configs: EntityConfig[] = [
   {
@@ -307,7 +324,9 @@ async function requestJson<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 export default function Home() {
-  const [activeKey, setActiveKey] = useState<EntityKey>('companies')
+  const navigate = useNavigate()
+  const params = useParams()
+  const activeKey = entityKeyByPath[params.section ?? 'companies'] ?? 'companies'
   const [data, setData] = useState<Record<EntityKey, EntityRecord[]>>(seedData)
   const [forms, setForms] = useState<Record<EntityKey, EntityRecord>>(() => {
     return configs.reduce<Record<EntityKey, EntityRecord>>((result, config) => {
@@ -322,6 +341,16 @@ export default function Home() {
 
   const activeConfig = configs.find((config) => config.key === activeKey) ?? configs[0]
   const activeRows = data[activeKey]
+
+  useEffect(() => {
+    if (params.section && !entityKeyByPath[params.section]) {
+      navigate('/companies', { replace: true })
+    }
+  }, [navigate, params.section])
+
+  function goToEntity(key: EntityKey) {
+    navigate(`/${pathByEntityKey[key]}`)
+  }
 
   const filteredRows = useMemo(() => {
     const keyword = search.trim().toLowerCase()
@@ -467,13 +496,13 @@ export default function Home() {
         <nav className="mt-8 space-y-6">
           <NavGroup title="管理">
             {configs.slice(0, 4).map((config) => (
-              <NavButton key={config.key} active={activeKey === config.key} icon={config.icon} onClick={() => setActiveKey(config.key)}>
+              <NavButton key={config.key} active={activeKey === config.key} icon={config.icon} onClick={() => goToEntity(config.key)}>
                 {config.title}
               </NavButton>
             ))}
           </NavGroup>
           <NavGroup title="账号">
-            <NavButton active={activeKey === 'companyUsers'} icon={UserRound} onClick={() => setActiveKey('companyUsers')}>
+            <NavButton active={activeKey === 'companyUsers'} icon={UserRound} onClick={() => goToEntity('companyUsers')}>
               企业用户
             </NavButton>
             <NavButton active={false} icon={LogIn} onClick={studentLogin}>
@@ -550,7 +579,7 @@ export default function Home() {
             </div>
 
             <div className="border-b border-neutral-200 px-4 py-3">
-              <Tabs value={activeKey} onValueChange={(value) => setActiveKey(value as EntityKey)}>
+              <Tabs value={activeKey} onValueChange={(value) => goToEntity(value as EntityKey)}>
                 <TabsList className="bg-neutral-100">
                   {configs.map((config) => (
                     <TabsTrigger key={config.key} value={config.key}>
