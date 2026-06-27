@@ -21,7 +21,7 @@ docker exec -it campusjobhub-mysql mysql -uroot -proot123456
 在项目根目录执行：
 
 ```powershell
-Get-Content .\docs\mysql\01_schema_and_seed.sql | docker exec -i campusjobhub-mysql mysql -uroot -proot123456
+cmd /c "docker exec -i campusjobhub-mysql mysql --default-character-set=utf8mb4 -uroot -proot123456 < docs\mysql\01_schema_and_seed.sql"
 ```
 
 脚本会完成以下工作：

@@ -42,7 +42,7 @@ docker ps -a --filter "name=campusjobhub-mysql"
 在项目根目录执行：
 
 ```powershell
-Get-Content .\docs\mysql\01_schema_and_seed.sql | docker exec -i campusjobhub-mysql mysql -uroot -proot123456
+cmd /c "docker exec -i campusjobhub-mysql mysql --default-character-set=utf8mb4 -uroot -proot123456 < docs\mysql\01_schema_and_seed.sql"
 ```
 
 这个脚本会创建数据库、数据表、应聘信息视图，并插入示例数据。
