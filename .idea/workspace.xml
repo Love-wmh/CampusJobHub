@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd001621-9267-4787-b38e-6e75e86c26d8" name="更改" comment="chore: 添加了gitignore文件">
+    <list default="true" id="bd001621-9267-4787-b38e-6e75e86c26d8" name="更改" comment="feat: 创建数据库容器">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -104,7 +104,7 @@
       <workItem from="1782544725384" duration="378000" />
       <workItem from="1782545117345" duration="439000" />
       <workItem from="1782545567751" duration="557000" />
-      <workItem from="1782546650874" duration="652000" />
+      <workItem from="1782546650874" duration="5198000" />
     </task>
     <task id="LOCAL-00001" summary="fix: 允许pnpm运行脚本">
       <option name="closed" value="true" />
@@ -138,7 +138,15 @@
       <option name="project" value="LOCAL" />
       <updated>1782546867661</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="feat: 创建数据库容器">
+      <option name="closed" value="true" />
+      <created>1782547364176</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1782547364176</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -172,6 +180,7 @@
     <MESSAGE value="fix: 测试提交" />
     <MESSAGE value="chore: init" />
     <MESSAGE value="chore: 添加了gitignore文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: 添加了gitignore文件" />
+    <MESSAGE value="feat: 创建数据库容器" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: 创建数据库容器" />
   </component>
 </project>
