@@ -448,10 +448,10 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-[#fff7f8] text-[#251319]">
-      <aside className="fixed inset-y-0 left-0 hidden w-56 border-r border-rose-100 bg-[#fff4f5] px-4 py-5 lg:block">
+    <main className="min-h-screen bg-white text-neutral-950">
+      <aside className="fixed inset-y-0 left-0 hidden w-56 border-r border-neutral-200 bg-neutral-50 px-4 py-5 lg:block">
         <div className="flex items-center gap-2 px-2 text-sm font-semibold">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-rose-600 text-white">
+          <div className="flex size-8 items-center justify-center rounded-sm bg-black text-white">
             <BriefcaseBusiness className="size-4" />
           </div>
           CampusJobHub
@@ -476,74 +476,74 @@ export default function Home() {
       </aside>
 
       <section className="lg:pl-56">
-        <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-rose-100 bg-[#fff7f8]/90 px-4 backdrop-blur md:px-6">
+        <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b border-neutral-200 bg-white/90 px-4 backdrop-blur md:px-6">
           <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon-sm" className="lg:hidden">
               <LayoutDashboard />
             </Button>
             <div>
               <p className="text-sm font-semibold">高校企业岗位招聘网站</p>
-              <p className="text-xs text-rose-900/50">24611602009 蒲自旭</p>
+              <p className="text-xs text-neutral-900/50">24611602009 蒲自旭</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="hidden h-8 items-center gap-2 rounded-lg border border-rose-200 bg-white px-3 text-sm text-rose-950/60 md:flex">
+            <div className="hidden h-8 items-center gap-2 rounded-sm border border-neutral-200 bg-white px-3 text-sm text-neutral-950/60 md:flex">
               <Search className="size-4" />
               <span>搜索企业、学生、岗位</span>
-              <Badge variant="outline" className="border-rose-200 text-rose-600">
+              <Badge variant="outline" className="border-neutral-200 text-black">
                 Ctrl K
               </Badge>
             </div>
             <Button variant="outline" size="icon-sm" onClick={loadAll} disabled={loading}>
               {loading ? <Loader2 className="animate-spin" /> : <RefreshCw />}
             </Button>
-            <div className="flex size-8 items-center justify-center rounded-full bg-rose-600 text-sm font-semibold text-white">蒲</div>
+            <div className="flex size-8 items-center justify-center rounded-sm bg-black text-sm font-semibold text-white">蒲</div>
           </div>
         </header>
 
         <div className="p-4 md:p-6">
           <section className="grid gap-3 md:grid-cols-4">
             {stats.map((stat) => (
-              <div key={stat.label} className="rounded-lg border border-rose-100 bg-white p-4 shadow-sm">
+              <div key={stat.label} className="rounded-sm border border-neutral-200 bg-white p-4 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <p className="text-sm text-rose-950/60">{stat.label}</p>
-                  <stat.icon className="size-4 text-rose-500" />
+                  <p className="text-sm text-neutral-950/60">{stat.label}</p>
+                  <stat.icon className="size-4 text-neutral-500" />
                 </div>
                 <p className="mt-2 text-2xl font-semibold">{stat.value}</p>
               </div>
             ))}
           </section>
 
-          <section className="mt-4 rounded-lg border border-rose-100 bg-white shadow-sm">
-            <div className="flex flex-col gap-4 border-b border-rose-100 p-4 lg:flex-row lg:items-center lg:justify-between">
+          <section className="mt-4 rounded-sm border border-neutral-200 bg-white shadow-sm">
+            <div className="flex flex-col gap-4 border-b border-neutral-200 p-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <div className="flex items-center gap-2">
-                  <activeConfig.icon className="size-5 text-rose-600" />
+                  <activeConfig.icon className="size-5 text-black" />
                   <h1 className="text-xl font-semibold">{activeConfig.title}</h1>
-                  <Badge className="bg-rose-600 text-white">{filteredRows.length} 条</Badge>
+                  <Badge className="bg-black text-white">{filteredRows.length} 条</Badge>
                 </div>
-                <p className="mt-1 text-sm text-rose-950/55">{activeConfig.description}</p>
+                <p className="mt-1 text-sm text-neutral-950/55">{activeConfig.description}</p>
               </div>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-rose-400" />
+                  <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
                   <Input
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
-                    className="h-9 w-full border-rose-200 pl-9 sm:w-72"
+                    className="h-9 w-full border-neutral-200 pl-9 sm:w-72"
                     placeholder="按名称、专业、城市筛选..."
                   />
                 </div>
-                <Button className="bg-rose-600 text-white hover:bg-rose-700" onClick={saveCurrent} disabled={loading}>
+                <Button className="bg-black text-white hover:bg-neutral-700" onClick={saveCurrent} disabled={loading}>
                   <Plus />
                   {editingId ? '保存修改' : `添加${activeConfig.title}`}
                 </Button>
               </div>
             </div>
 
-            <div className="border-b border-rose-100 px-4 py-3">
+            <div className="border-b border-neutral-200 px-4 py-3">
               <Tabs value={activeKey} onValueChange={(value) => setActiveKey(value as EntityKey)}>
-                <TabsList className="bg-rose-50">
+                <TabsList className="bg-neutral-100">
                   {configs.map((config) => (
                     <TabsTrigger key={config.key} value={config.key}>
                       {config.title}
@@ -557,15 +557,15 @@ export default function Home() {
               <div className="overflow-hidden">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-rose-50/60 hover:bg-rose-50/60">
+                    <TableRow className="bg-neutral-100/60 hover:bg-neutral-100/60">
                       <TableHead className="w-10">
-                        <span className="block size-4 rounded-full border border-rose-200" />
+                        <span className="block size-4 rounded-sm border border-neutral-200" />
                       </TableHead>
                       {activeConfig.columns.map((column) => (
                         <TableHead key={column.key} style={{ width: column.width }}>
                           <span className="inline-flex items-center gap-1">
                             {column.label}
-                            <ChevronDown className="size-3 text-rose-300" />
+                            <ChevronDown className="size-3 text-neutral-300" />
                           </span>
                         </TableHead>
                       ))}
@@ -576,7 +576,7 @@ export default function Home() {
                     {filteredRows.map((row) => (
                       <TableRow key={String(row[activeConfig.idKey])}>
                         <TableCell>
-                          <span className="block size-4 rounded-full border border-rose-200" />
+                          <span className="block size-4 rounded-sm border border-neutral-200" />
                         </TableCell>
                         {activeConfig.columns.map((column) => (
                           <TableCell key={column.key} className="max-w-[340px] overflow-hidden text-ellipsis">
@@ -589,7 +589,7 @@ export default function Home() {
                               <Settings2 />
                             </Button>
                             <Button variant="ghost" size="icon-sm" onClick={() => deleteRow(row)}>
-                              <Trash2 className="text-rose-600" />
+                              <Trash2 className="text-black" />
                             </Button>
                             <Button variant="ghost" size="icon-sm">
                               <MoreHorizontal />
@@ -601,31 +601,31 @@ export default function Home() {
                   </TableBody>
                 </Table>
                 {filteredRows.length === 0 ? (
-                  <div className="flex h-48 items-center justify-center text-sm text-rose-950/50">暂无匹配数据</div>
+                  <div className="flex h-48 items-center justify-center text-sm text-neutral-950/50">暂无匹配数据</div>
                 ) : null}
               </div>
 
-              <aside className="border-t border-rose-100 bg-[#fffafa] p-4 lg:border-l lg:border-t-0">
+              <aside className="border-t border-neutral-200 bg-neutral-50 p-4 lg:border-l lg:border-t-0">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-sm font-semibold">{editingId ? '编辑记录' : '新增记录'}</h2>
-                    <p className="mt-1 text-xs text-rose-950/50">字段对应数据库实体类属性</p>
+                    <p className="mt-1 text-xs text-neutral-950/50">字段对应数据库实体类属性</p>
                   </div>
                   <Button variant="outline" size="sm" onClick={resetForm}>
                     重置
                   </Button>
                 </div>
-                <Separator className="my-4 bg-rose-100" />
+                <Separator className="my-4 bg-neutral-200" />
                 <div className="space-y-3">
                   {activeConfig.fields.map((field) => (
                     <div key={field.key} className="space-y-1.5">
-                      <Label className="text-xs text-rose-950/70">{field.label}</Label>
+                      <Label className="text-xs text-neutral-950/70">{field.label}</Label>
                       {field.type === 'textarea' ? (
                         <Textarea
                           value={String(forms[activeKey][field.key] ?? '')}
                           onChange={(event) => updateForm(field, event.target.value)}
                           placeholder={field.placeholder}
-                          className="min-h-20 resize-none border-rose-200 bg-white"
+                          className="min-h-20 resize-none border-neutral-200 bg-white"
                         />
                       ) : (
                         <Input
@@ -633,17 +633,17 @@ export default function Home() {
                           type={field.type === 'number' ? 'number' : 'text'}
                           onChange={(event) => updateForm(field, event.target.value)}
                           placeholder={field.placeholder}
-                          className="border-rose-200 bg-white"
+                          className="border-neutral-200 bg-white"
                         />
                       )}
                     </div>
                   ))}
                 </div>
-                <Button className="mt-4 w-full bg-rose-600 text-white hover:bg-rose-700" onClick={saveCurrent} disabled={loading}>
+                <Button className="mt-4 w-full bg-black text-white hover:bg-neutral-700" onClick={saveCurrent} disabled={loading}>
                   {loading ? <Loader2 className="animate-spin" /> : <Plus />}
                   {editingId ? '保存当前记录' : '提交新增记录'}
                 </Button>
-                <p className="mt-3 rounded-lg border border-rose-100 bg-white p-3 text-xs leading-5 text-rose-950/60">{notice}</p>
+                <p className="mt-3 rounded-sm border border-neutral-200 bg-white p-3 text-xs leading-5 text-neutral-950/60">{notice}</p>
               </aside>
             </div>
           </section>
@@ -656,7 +656,7 @@ export default function Home() {
 function NavGroup({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div>
-      <p className="px-2 text-xs text-rose-900/50">{title}</p>
+      <p className="px-2 text-xs text-neutral-900/50">{title}</p>
       <div className="mt-2 space-y-1">{children}</div>
     </div>
   )
@@ -677,8 +677,8 @@ function NavButton({
     <button
       type="button"
       onClick={onClick}
-      className={`flex h-9 w-full items-center gap-2 rounded-lg px-2 text-left text-sm transition ${
-        active ? 'bg-rose-100 text-rose-950' : 'text-rose-950/75 hover:bg-rose-50'
+      className={`flex h-9 w-full items-center gap-2 rounded-sm px-2 text-left text-sm transition ${
+        active ? 'bg-neutral-200 text-neutral-950' : 'text-neutral-950/75 hover:bg-neutral-100'
       }`}
     >
       <Icon className="size-4" />
@@ -692,7 +692,7 @@ function CellValue({ row, column, activeKey }: { row: EntityRecord; column: Colu
   if (activeKey === 'companies' && column.key === 'companyName') {
     return (
       <div className="flex items-center gap-2">
-        <div className="size-8 overflow-hidden rounded-lg bg-rose-50">
+        <div className="size-8 overflow-hidden rounded-sm bg-neutral-100">
           {row.companyImage ? <img src={String(row.companyImage)} alt="" className="size-full object-cover" /> : null}
         </div>
         <span className="font-medium">{displayValue(value)}</span>
@@ -700,17 +700,17 @@ function CellValue({ row, column, activeKey }: { row: EntityRecord; column: Colu
     )
   }
   if (column.key === 'salaryMin' || column.key === 'salaryMax') {
-    return <Badge variant="outline" className="border-rose-200 text-rose-700">￥{displayValue(value)}</Badge>
+    return <Badge variant="outline" className="border-neutral-200 text-neutral-700">￥{displayValue(value)}</Badge>
   }
   if (column.key === 'resumeUrl') {
     return (
-      <a className="text-rose-600 underline-offset-4 hover:underline" href={String(value)} target="_blank" rel="noreferrer">
+      <a className="text-black underline-offset-4 hover:underline" href={String(value)} target="_blank" rel="noreferrer">
         {displayValue(value)}
       </a>
     )
   }
   if (column.key === 'companyNature' || column.key === 'major') {
-    return <Badge className="bg-rose-50 text-rose-700 hover:bg-rose-50">{displayValue(value)}</Badge>
+    return <Badge className="bg-neutral-100 text-neutral-700 hover:bg-neutral-100">{displayValue(value)}</Badge>
   }
   return <span>{displayValue(value)}</span>
 }
