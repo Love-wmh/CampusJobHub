@@ -66,6 +66,14 @@ type EntityConfig = {
   searchableKeys: string[]
 }
 
+type SearchResult = {
+  config: EntityConfig
+  row: EntityRecord
+  title: string
+  subtitle: string
+  keyword: string
+}
+
 const API_BASE = 'http://localhost:8080/api'
 
 const entityKeyByPath: Record<string, EntityKey> = {
@@ -312,6 +320,63 @@ function displayValue(value: EntityRecord[string]) {
   return String(value)
 }
 
+function joinFilled(parts: Array<EntityRecord[string] | string>) {
+  return parts
+    .map((part) => displayValue(part))
+    .filter((part) => part !== '未填写')
+    .join(' · ')
+}
+
+function createSearchResult(config: EntityConfig, row: EntityRecord): SearchResult {
+  if (config.key === 'companies') {
+    return {
+      config,
+      row,
+      title: displayValue(row.companyName),
+      subtitle: joinFilled([row.companyCategory, row.companyNature, row.city, row.address]),
+      keyword: displayValue(row.companyName),
+    }
+  }
+
+  if (config.key === 'students') {
+    return {
+      config,
+      row,
+      title: displayValue(row.studentName),
+      subtitle: joinFilled([row.className, row.major, row.phone, row.email]),
+      keyword: displayValue(row.studentName),
+    }
+  }
+
+  if (config.key === 'jobs') {
+    return {
+      config,
+      row,
+      title: displayValue(row.jobName),
+      subtitle: joinFilled([`企业ID ${displayValue(row.companyId)}`, `￥${displayValue(row.salaryMin)}-${displayValue(row.salaryMax)}`, row.abilityDescription]),
+      keyword: displayValue(row.jobName),
+    }
+  }
+
+  if (config.key === 'applications') {
+    return {
+      config,
+      row,
+      title: `${displayValue(row.studentName)} 应聘 ${displayValue(row.jobName)}`,
+      subtitle: joinFilled([row.companyName, row.major, row.resumeUrl]),
+      keyword: displayValue(row.studentName),
+    }
+  }
+
+  return {
+    config,
+    row,
+    title: displayValue(row.name),
+    subtitle: joinFilled([row.phone]),
+    keyword: displayValue(row.name),
+  }
+}
+
 async function requestJson<T>(path: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${API_BASE}${path}`, {
     headers: { 'Content-Type': 'application/json' },
@@ -336,7 +401,9 @@ export default function Home() {
   })
   const [editingId, setEditingId] = useState<string | number | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [searchDialogOpen, setSearchDialogOpen] = useState(false)
   const [search, setSearch] = useState('')
+  const [globalSearch, setGlobalSearch] = useState('')
   const [loading, setLoading] = useState(false)
   const [authLabel, setAuthLabel] = useState('')
 
@@ -348,6 +415,18 @@ export default function Home() {
       navigate('/companies', { replace: true })
     }
   }, [navigate, params.section])
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault()
+        setSearchDialogOpen(true)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   function goToEntity(key: EntityKey) {
     navigate(`/${pathByEntityKey[key]}`)
@@ -370,6 +449,32 @@ export default function Home() {
     ],
     [data],
   )
+
+  const globalSearchResults = useMemo(() => {
+    const keyword = globalSearch.trim().toLowerCase()
+    if (!keyword) return []
+    return configs.flatMap((config) =>
+      data[config.key]
+        .filter((row) => config.searchableKeys.some((key) => displayValue(row[key]).toLowerCase().includes(keyword)))
+        .map((row) => createSearchResult(config, row)),
+    )
+  }, [data, globalSearch])
+
+  function openSearchDialog() {
+    setSearchDialogOpen(true)
+  }
+
+  function submitGlobalSearch() {
+    if (globalSearch.trim()) {
+      setSearchDialogOpen(true)
+    }
+  }
+
+  function goToSearchResult(result: SearchResult) {
+    setSearch(result.keyword)
+    setSearchDialogOpen(false)
+    navigate(`/${pathByEntityKey[result.config.key]}`)
+  }
 
   async function loadEntity(config: EntityConfig) {
     setLoading(true)
@@ -538,7 +643,18 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <div className="hidden h-8 items-center gap-2 rounded-sm border border-neutral-200 bg-white px-3 text-sm text-neutral-950/60 md:flex">
               <Search className="size-4" />
-              <span>搜索企业、学生、岗位</span>
+              <input
+                value={globalSearch}
+                onChange={(event) => setGlobalSearch(event.target.value)}
+                onFocus={openSearchDialog}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter') {
+                    submitGlobalSearch()
+                  }
+                }}
+                className="h-full w-44 bg-transparent text-sm outline-none placeholder:text-neutral-400"
+                placeholder="搜索企业、学生、岗位"
+              />
               <Badge variant="outline" className="border-neutral-200 text-black">
                 Ctrl K
               </Badge>
@@ -705,6 +821,60 @@ export default function Home() {
               {editingId ? '保存修改' : '提交新增'}
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={searchDialogOpen} onOpenChange={setSearchDialogOpen}>
+        <DialogContent className="max-h-[82vh] overflow-y-auto sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>全局搜索</DialogTitle>
+            <DialogDescription>跨企业、学生、岗位、应聘信息和企业用户检索，点击结果可跳转到对应页面。</DialogDescription>
+          </DialogHeader>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-neutral-400" />
+            <Input
+              autoFocus
+              value={globalSearch}
+              onChange={(event) => setGlobalSearch(event.target.value)}
+              className="h-9 border-neutral-200 bg-white pl-9"
+              placeholder="输入企业、学生、岗位、城市、专业..."
+            />
+          </div>
+          <div className="grid gap-2">
+            {globalSearch.trim() ? (
+              globalSearchResults.length ? (
+                globalSearchResults.map((result) => (
+                  <button
+                    key={`${result.config.key}-${String(result.row[result.config.idKey])}`}
+                    type="button"
+                    onClick={() => goToSearchResult(result)}
+                    className="flex cursor-pointer items-center gap-3 rounded-sm border border-neutral-200 bg-white p-3 text-left transition hover:bg-neutral-100"
+                  >
+                    <div className="flex size-9 items-center justify-center rounded-sm bg-black text-white">
+                      <result.config.icon className="size-4" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="truncate text-sm font-medium">{result.title}</p>
+                        <Badge variant="outline" className="border-neutral-200 text-neutral-700">
+                          {result.config.title}
+                        </Badge>
+                      </div>
+                      <p className="mt-1 truncate text-xs text-neutral-500">{result.subtitle}</p>
+                    </div>
+                  </button>
+                ))
+              ) : (
+                <div className="flex h-28 items-center justify-center rounded-sm border border-neutral-200 text-sm text-neutral-500">
+                  没有找到匹配结果
+                </div>
+              )
+            ) : (
+              <div className="flex h-28 items-center justify-center rounded-sm border border-neutral-200 text-sm text-neutral-500">
+                输入关键词后查看搜索结果
+              </div>
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </main>

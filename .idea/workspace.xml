@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd001621-9267-4787-b38e-6e75e86c26d8" name="更改" comment="fix: 前端使用有路由系统">
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/campusjobhub/controller/CompanyUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/campusjobhub/controller/CompanyUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/campusjobhub/controller/StudentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/campusjobhub/controller/StudentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/app/routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/routes.ts" afterDir="false" />
+    <list default="true" id="bd001621-9267-4787-b38e-6e75e86c26d8" name="更改" comment="feat: 增加了登录注册功能">
       <change beforePath="$PROJECT_DIR$/frontend/app/routes/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/app/routes/home.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,6 +33,7 @@
     &quot;accountId&quot;: &quot;b4a8a132-df90-4c21-be8a-2d4990dc1de8&quot;
   }
 }</component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
   <component name="KubernetesApiProvider"><![CDATA[{
   "isMigrated": true
 }]]></component>
@@ -111,7 +109,7 @@
       <workItem from="1782545117345" duration="439000" />
       <workItem from="1782545567751" duration="557000" />
       <workItem from="1782546650874" duration="6772000" />
-      <workItem from="1782553957763" duration="3810000" />
+      <workItem from="1782553957763" duration="4307000" />
     </task>
     <task id="LOCAL-00001" summary="fix: 允许pnpm运行脚本">
       <option name="closed" value="true" />
@@ -249,7 +247,15 @@
       <option name="project" value="LOCAL" />
       <updated>1782559796538</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="feat: 增加了登录注册功能">
+      <option name="closed" value="true" />
+      <created>1782560175048</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1782560175048</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -295,6 +301,7 @@
     <MESSAGE value="fix: 增加了后端缺失的方法" />
     <MESSAGE value="fix: 增加了打印请求日志的层" />
     <MESSAGE value="fix: 前端使用有路由系统" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: 前端使用有路由系统" />
+    <MESSAGE value="feat: 增加了登录注册功能" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: 增加了登录注册功能" />
   </component>
 </project>
