@@ -21,6 +21,14 @@ import {
 
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '~/components/ui/dialog'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { Separator } from '~/components/ui/separator'
@@ -308,6 +316,7 @@ export default function Home() {
     }, {} as Record<EntityKey, EntityRecord>)
   })
   const [editingId, setEditingId] = useState<string | number | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
   const [notice, setNotice] = useState('后端未启动时会展示内置示例数据')
@@ -371,6 +380,11 @@ export default function Home() {
     setEditingId(null)
   }
 
+  function openCreateDialog() {
+    resetForm()
+    setDialogOpen(true)
+  }
+
   function editRow(row: EntityRecord) {
     const nextForm = activeConfig.fields.reduce<EntityRecord>((record, field) => {
       record[field.key] = row[field.key] ?? ''
@@ -378,6 +392,7 @@ export default function Home() {
     }, {})
     setForms((current) => ({ ...current, [activeKey]: nextForm }))
     setEditingId(row[activeConfig.idKey] ?? null)
+    setDialogOpen(true)
   }
 
   async function saveCurrent() {
@@ -398,6 +413,7 @@ export default function Home() {
       }
       await loadEntity(activeConfig)
       resetForm()
+      setDialogOpen(false)
       setNotice(isEditing ? '修改成功，数据已同步到 MySQL' : '添加成功，数据已同步到 MySQL')
     } catch {
       const localId = isEditing ? editingId : Date.now()
@@ -409,6 +425,7 @@ export default function Home() {
           : [localRow, ...current[activeKey]],
       }))
       resetForm()
+      setDialogOpen(false)
       setNotice('后端暂不可用，本次操作只更新了页面示例数据')
     } finally {
       setLoading(false)
@@ -534,9 +551,9 @@ export default function Home() {
                     placeholder="按名称、专业、城市筛选..."
                   />
                 </div>
-                <Button className="bg-black text-white hover:bg-neutral-700" onClick={saveCurrent} disabled={loading}>
+                <Button className="bg-black text-white hover:bg-neutral-700" onClick={openCreateDialog} disabled={loading}>
                   <Plus />
-                  {editingId ? '保存修改' : `添加${activeConfig.title}`}
+                  添加{activeConfig.title}
                 </Button>
               </div>
             </div>
@@ -553,102 +570,102 @@ export default function Home() {
               </Tabs>
             </div>
 
-            <div className="grid min-h-[560px] lg:grid-cols-[1fr_360px]">
-              <div className="overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="bg-neutral-100/60 hover:bg-neutral-100/60">
-                      <TableHead className="w-10">
-                        <span className="block size-4 rounded-sm border border-neutral-200" />
+            <div className="min-h-[560px] overflow-hidden">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-neutral-100/60 hover:bg-neutral-100/60">
+                    <TableHead className="w-10">
+                      <span className="block size-4 rounded-sm border border-neutral-200" />
+                    </TableHead>
+                    {activeConfig.columns.map((column) => (
+                      <TableHead key={column.key} style={{ width: column.width }}>
+                        <span className="inline-flex items-center gap-1">
+                          {column.label}
+                          <ChevronDown className="size-3 text-neutral-300" />
+                        </span>
                       </TableHead>
-                      {activeConfig.columns.map((column) => (
-                        <TableHead key={column.key} style={{ width: column.width }}>
-                          <span className="inline-flex items-center gap-1">
-                            {column.label}
-                            <ChevronDown className="size-3 text-neutral-300" />
-                          </span>
-                        </TableHead>
-                      ))}
-                      <TableHead className="w-28 text-right">操作</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredRows.map((row) => (
-                      <TableRow key={String(row[activeConfig.idKey])}>
-                        <TableCell>
-                          <span className="block size-4 rounded-sm border border-neutral-200" />
-                        </TableCell>
-                        {activeConfig.columns.map((column) => (
-                          <TableCell key={column.key} className="max-w-[340px] overflow-hidden text-ellipsis">
-                            <CellValue row={row} column={column} activeKey={activeKey} />
-                          </TableCell>
-                        ))}
-                        <TableCell className="text-right">
-                          <div className="flex justify-end gap-1">
-                            <Button variant="ghost" size="icon-sm" onClick={() => editRow(row)}>
-                              <Settings2 />
-                            </Button>
-                            <Button variant="ghost" size="icon-sm" onClick={() => deleteRow(row)}>
-                              <Trash2 className="text-black" />
-                            </Button>
-                            <Button variant="ghost" size="icon-sm">
-                              <MoreHorizontal />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
                     ))}
-                  </TableBody>
-                </Table>
-                {filteredRows.length === 0 ? (
-                  <div className="flex h-48 items-center justify-center text-sm text-neutral-950/50">暂无匹配数据</div>
-                ) : null}
-              </div>
-
-              <aside className="border-t border-neutral-200 bg-neutral-50 p-4 lg:border-l lg:border-t-0">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-sm font-semibold">{editingId ? '编辑记录' : '新增记录'}</h2>
-                    <p className="mt-1 text-xs text-neutral-950/50">字段对应数据库实体类属性</p>
-                  </div>
-                  <Button variant="outline" size="sm" onClick={resetForm}>
-                    重置
-                  </Button>
-                </div>
-                <Separator className="my-4 bg-neutral-200" />
-                <div className="space-y-3">
-                  {activeConfig.fields.map((field) => (
-                    <div key={field.key} className="space-y-1.5">
-                      <Label className="text-xs text-neutral-950/70">{field.label}</Label>
-                      {field.type === 'textarea' ? (
-                        <Textarea
-                          value={String(forms[activeKey][field.key] ?? '')}
-                          onChange={(event) => updateForm(field, event.target.value)}
-                          placeholder={field.placeholder}
-                          className="min-h-20 resize-none border-neutral-200 bg-white"
-                        />
-                      ) : (
-                        <Input
-                          value={String(forms[activeKey][field.key] ?? '')}
-                          type={field.type === 'number' ? 'number' : 'text'}
-                          onChange={(event) => updateForm(field, event.target.value)}
-                          placeholder={field.placeholder}
-                          className="border-neutral-200 bg-white"
-                        />
-                      )}
-                    </div>
+                    <TableHead className="w-28 text-right">操作</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredRows.map((row) => (
+                    <TableRow key={String(row[activeConfig.idKey])}>
+                      <TableCell>
+                        <span className="block size-4 rounded-sm border border-neutral-200" />
+                      </TableCell>
+                      {activeConfig.columns.map((column) => (
+                        <TableCell key={column.key} className="max-w-[340px] overflow-hidden text-ellipsis">
+                          <CellValue row={row} column={column} activeKey={activeKey} />
+                        </TableCell>
+                      ))}
+                      <TableCell className="text-right">
+                        <div className="flex justify-end gap-1">
+                          <Button variant="ghost" size="icon-sm" onClick={() => editRow(row)}>
+                            <Settings2 />
+                          </Button>
+                          <Button variant="ghost" size="icon-sm" onClick={() => deleteRow(row)}>
+                            <Trash2 className="text-black" />
+                          </Button>
+                          <Button variant="ghost" size="icon-sm">
+                            <MoreHorizontal />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
                   ))}
-                </div>
-                <Button className="mt-4 w-full bg-black text-white hover:bg-neutral-700" onClick={saveCurrent} disabled={loading}>
-                  {loading ? <Loader2 className="animate-spin" /> : <Plus />}
-                  {editingId ? '保存当前记录' : '提交新增记录'}
-                </Button>
-                <p className="mt-3 rounded-sm border border-neutral-200 bg-white p-3 text-xs leading-5 text-neutral-950/60">{notice}</p>
-              </aside>
+                </TableBody>
+              </Table>
+              {filteredRows.length === 0 ? (
+                <div className="flex h-48 items-center justify-center text-sm text-neutral-950/50">暂无匹配数据</div>
+              ) : null}
             </div>
           </section>
+          <p className="mt-3 rounded-sm border border-neutral-200 bg-white p-3 text-xs leading-5 text-neutral-950/60">{notice}</p>
         </div>
       </section>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-h-[86vh] overflow-y-auto sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{editingId ? `编辑${activeConfig.title}` : `新增${activeConfig.title}`}</DialogTitle>
+            <DialogDescription>填写内容会映射到对应实体类字段，并通过后端接口保存到 MySQL。</DialogDescription>
+          </DialogHeader>
+          <Separator className="bg-neutral-200" />
+          <div className="grid gap-3 sm:grid-cols-2">
+            {activeConfig.fields.map((field) => (
+              <div key={field.key} className={field.type === 'textarea' ? 'space-y-1.5 sm:col-span-2' : 'space-y-1.5'}>
+                <Label className="text-xs text-neutral-950/70">{field.label}</Label>
+                {field.type === 'textarea' ? (
+                  <Textarea
+                    value={String(forms[activeKey][field.key] ?? '')}
+                    onChange={(event) => updateForm(field, event.target.value)}
+                    placeholder={field.placeholder}
+                    className="min-h-24 resize-none border-neutral-200 bg-white"
+                  />
+                ) : (
+                  <Input
+                    value={String(forms[activeKey][field.key] ?? '')}
+                    type={field.type === 'number' ? 'number' : 'text'}
+                    onChange={(event) => updateForm(field, event.target.value)}
+                    placeholder={field.placeholder}
+                    className="border-neutral-200 bg-white"
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={resetForm} disabled={loading}>
+              重置
+            </Button>
+            <Button className="bg-black text-white hover:bg-neutral-700" onClick={saveCurrent} disabled={loading}>
+              {loading ? <Loader2 className="animate-spin" /> : <Plus />}
+              {editingId ? '保存修改' : '提交新增'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   )
 }
