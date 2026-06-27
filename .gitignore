@@ -6,6 +6,14 @@
 /.react-router/
 /build/
 
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+
 # IDE files
 .idea/
 .vscode/
