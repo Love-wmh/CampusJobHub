@@ -4,6 +4,7 @@ import com.campusjobhub.entity.CompanyUser;
 import com.campusjobhub.service.CompanyUserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,6 +35,11 @@ public class CompanyUserController {
     @PostMapping("/login")
     public CompanyUser companyUserLogin(@RequestBody Map<String, String> body) {
         return companyUserService.companyUserLogin(body.get("name"), body.get("password"));
+    }
+
+    @GetMapping
+    public List<CompanyUser> findAllCompanyUsers() {
+        return companyUserService.findAllCompanyUsers();
     }
 
     @GetMapping("/{companyUserId}")

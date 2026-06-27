@@ -4,6 +4,8 @@ import com.campusjobhub.entity.CompanyUser;
 import com.campusjobhub.mapper.CompanyUserMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CompanyUserService {
     private final CompanyUserMapper companyUserMapper;
@@ -31,5 +33,9 @@ public class CompanyUserService {
 
     public CompanyUser findCompanyUserById(Long companyUserId) {
         return companyUserMapper.findCompanyUserById(companyUserId);
+    }
+
+    public List<CompanyUser> findAllCompanyUsers() {
+        return companyUserMapper.findAllCompanyUsers();
     }
 }

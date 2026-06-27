@@ -3,6 +3,8 @@ package com.campusjobhub.mapper;
 import com.campusjobhub.entity.CompanyUser;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
+
 public interface CompanyUserMapper {
     @Insert("INSERT INTO company_user(name, password, phone) VALUES(#{name}, #{password}, #{phone})")
     @Options(useGeneratedKeys = true, keyProperty = "companyUserId")
@@ -19,4 +21,7 @@ public interface CompanyUserMapper {
 
     @Select("SELECT * FROM company_user WHERE company_user_id=#{companyUserId}")
     CompanyUser findCompanyUserById(Long companyUserId);
+
+    @Select("SELECT * FROM company_user ORDER BY company_user_id DESC")
+    List<CompanyUser> findAllCompanyUsers();
 }
