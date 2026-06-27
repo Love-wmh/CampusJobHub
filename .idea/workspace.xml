@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd001621-9267-4787-b38e-6e75e86c26d8" name="更改" comment="feat: 创建数据库容器">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="bd001621-9267-4787-b38e-6e75e86c26d8" name="更改" comment="feat: 构建基础前后端" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -78,7 +76,7 @@
     "nodejs_package_manager_path": "pnpm",
     "prettierjs.PrettierConfiguration.Package": "F:\\Y_Gig\\pzxweb_qyjkjjs\\frontend\\node_modules\\prettier",
     "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
-    "ts.external.directory.path": "D:\\WebStorm 2026.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "ts.external.directory.path": "F:\\Y_Gig\\pzxweb_qyjkjjs\\frontend\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -104,7 +102,7 @@
       <workItem from="1782544725384" duration="378000" />
       <workItem from="1782545117345" duration="439000" />
       <workItem from="1782545567751" duration="557000" />
-      <workItem from="1782546650874" duration="5198000" />
+      <workItem from="1782546650874" duration="5521000" />
     </task>
     <task id="LOCAL-00001" summary="fix: 允许pnpm运行脚本">
       <option name="closed" value="true" />
@@ -146,7 +144,23 @@
       <option name="project" value="LOCAL" />
       <updated>1782547364176</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="feat: 构建基础前后端">
+      <option name="closed" value="true" />
+      <created>1782552291858</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1782552291858</updated>
+    </task>
+    <task id="LOCAL-00007" summary="feat: 构建基础前后端">
+      <option name="closed" value="true" />
+      <created>1782552305410</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1782552305410</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -181,6 +195,7 @@
     <MESSAGE value="chore: init" />
     <MESSAGE value="chore: 添加了gitignore文件" />
     <MESSAGE value="feat: 创建数据库容器" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: 创建数据库容器" />
+    <MESSAGE value="feat: 构建基础前后端" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: 构建基础前后端" />
   </component>
 </project>
