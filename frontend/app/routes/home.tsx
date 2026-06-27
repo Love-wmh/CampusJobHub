@@ -319,7 +319,6 @@ export default function Home() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
-  const [notice, setNotice] = useState('后端未启动时会展示内置示例数据')
 
   const activeConfig = configs.find((config) => config.key === activeKey) ?? configs[0]
   const activeRows = data[activeKey]
@@ -347,10 +346,8 @@ export default function Home() {
     try {
       const rows = await requestJson<EntityRecord[]>(config.endpoint)
       setData((current) => ({ ...current, [config.key]: rows }))
-      setNotice('已连接后端 API，数据来自 MySQL')
     } catch {
       setData((current) => ({ ...current, [config.key]: current[config.key].length ? current[config.key] : seedData[config.key] }))
-      setNotice('后端暂不可用，当前显示内置示例数据')
     } finally {
       setLoading(false)
     }
@@ -414,7 +411,6 @@ export default function Home() {
       await loadEntity(activeConfig)
       resetForm()
       setDialogOpen(false)
-      setNotice(isEditing ? '修改成功，数据已同步到 MySQL' : '添加成功，数据已同步到 MySQL')
     } catch {
       const localId = isEditing ? editingId : Date.now()
       const localRow = { ...payload, [activeConfig.idKey]: localId }
@@ -426,7 +422,6 @@ export default function Home() {
       }))
       resetForm()
       setDialogOpen(false)
-      setNotice('后端暂不可用，本次操作只更新了页面示例数据')
     } finally {
       setLoading(false)
     }
@@ -439,13 +434,11 @@ export default function Home() {
     try {
       await requestJson<number>(`${activeConfig.endpoint}/${id}`, { method: 'DELETE' })
       await loadEntity(activeConfig)
-      setNotice('删除成功，数据已同步到 MySQL')
     } catch {
       setData((current) => ({
         ...current,
         [activeKey]: current[activeKey].filter((item) => item[activeConfig.idKey] !== id),
       }))
-      setNotice('后端暂不可用，本次删除只更新了页面示例数据')
     } finally {
       setLoading(false)
     }
@@ -455,10 +448,8 @@ export default function Home() {
     setLoading(true)
     try {
       const body = { username: 'student001', password: '123456' }
-      const user = await requestJson<EntityRecord | null>('/students/login', { method: 'POST', body: JSON.stringify(body) })
-      setNotice(user ? `学生登录成功：${user.studentName}` : '学生登录失败')
+      await requestJson<EntityRecord | null>('/students/login', { method: 'POST', body: JSON.stringify(body) })
     } catch {
-      setNotice('后端暂不可用，无法执行登录验证')
     } finally {
       setLoading(false)
     }
@@ -621,7 +612,6 @@ export default function Home() {
               ) : null}
             </div>
           </section>
-          <p className="mt-3 rounded-sm border border-neutral-200 bg-white p-3 text-xs leading-5 text-neutral-950/60">{notice}</p>
         </div>
       </section>
 
