@@ -4,6 +4,7 @@ import com.campusjobhub.entity.CompanyUser;
 import com.campusjobhub.service.CompanyUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,9 +40,10 @@ public class CompanyUserController {
     }
 
     @PostMapping("/login")
-    public CompanyUser companyUserLogin(@RequestBody Map<String, String> body) {
+    public ResponseEntity<CompanyUser> companyUserLogin(@RequestBody Map<String, String> body) {
         log.info("企业用户登录：name={}", body.get("name"));
-        return companyUserService.companyUserLogin(body.get("name"), body.get("password"));
+        CompanyUser companyUser = companyUserService.companyUserLogin(body.get("name"), body.get("password"));
+        return companyUser == null ? ResponseEntity.status(401).build() : ResponseEntity.ok(companyUser);
     }
 
     @GetMapping

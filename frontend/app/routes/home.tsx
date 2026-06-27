@@ -338,6 +338,7 @@ export default function Home() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
+  const [authLabel, setAuthLabel] = useState('')
 
   const activeConfig = configs.find((config) => config.key === activeKey) ?? configs[0]
   const activeRows = data[activeKey]
@@ -389,6 +390,28 @@ export default function Home() {
   useEffect(() => {
     void loadAll()
   }, [])
+
+  useEffect(() => {
+    const raw = localStorage.getItem('campusjobhub_user')
+    if (!raw) {
+      setAuthLabel('')
+      return
+    }
+    try {
+      const parsed = JSON.parse(raw) as { role?: string; user?: EntityRecord }
+      const user = parsed.user ?? {}
+      const name = parsed.role === 'company' ? user.name : user.studentName || user.username
+      setAuthLabel(name ? String(name) : '已登录')
+    } catch {
+      setAuthLabel('')
+    }
+  }, [])
+
+  function logout() {
+    localStorage.removeItem('campusjobhub_user')
+    setAuthLabel('')
+    navigate('/auth')
+  }
 
   function updateForm(field: FieldConfig, value: string) {
     const nextValue = field.type === 'number' || numericFields.has(field.key) ? Number(value) : value
@@ -473,17 +496,6 @@ export default function Home() {
     }
   }
 
-  async function studentLogin() {
-    setLoading(true)
-    try {
-      const body = { username: 'student001', password: '123456' }
-      await requestJson<EntityRecord | null>('/students/login', { method: 'POST', body: JSON.stringify(body) })
-    } catch {
-    } finally {
-      setLoading(false)
-    }
-  }
-
   return (
     <main className="min-h-screen bg-white text-neutral-950">
       <aside className="fixed inset-y-0 left-0 hidden w-56 border-r border-neutral-200 bg-neutral-50 px-4 py-5 lg:block">
@@ -505,8 +517,8 @@ export default function Home() {
             <NavButton active={activeKey === 'companyUsers'} icon={UserRound} onClick={() => goToEntity('companyUsers')}>
               企业用户
             </NavButton>
-            <NavButton active={false} icon={LogIn} onClick={studentLogin}>
-              学生登录测试
+            <NavButton active={false} icon={LogIn} onClick={() => navigate('/auth')}>
+              登录 / 注册
             </NavButton>
           </NavGroup>
         </nav>
@@ -534,6 +546,16 @@ export default function Home() {
             <Button variant="outline" size="icon-sm" onClick={loadAll} disabled={loading}>
               {loading ? <Loader2 className="animate-spin" /> : <RefreshCw />}
             </Button>
+            {authLabel ? (
+              <Button variant="outline" size="sm" onClick={logout}>
+                {authLabel}
+                退出
+              </Button>
+            ) : (
+              <Button className="bg-black text-white hover:bg-neutral-700" size="sm" onClick={() => navigate('/auth')}>
+                登录
+              </Button>
+            )}
             <div className="flex size-8 items-center justify-center rounded-sm bg-black text-sm font-semibold text-white">蒲</div>
           </div>
         </header>

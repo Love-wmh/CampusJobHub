@@ -4,6 +4,7 @@ import com.campusjobhub.entity.Student;
 import com.campusjobhub.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,8 +58,9 @@ public class StudentController {
     }
 
     @PostMapping("/login")
-    public Student studentLogin(@RequestBody Map<String, String> body) {
+    public ResponseEntity<Student> studentLogin(@RequestBody Map<String, String> body) {
         log.info("学生登录：username={}", body.get("username"));
-        return studentService.studentLogin(body.get("username"), body.get("password"));
+        Student student = studentService.studentLogin(body.get("username"), body.get("password"));
+        return student == null ? ResponseEntity.status(401).build() : ResponseEntity.ok(student);
     }
 }
