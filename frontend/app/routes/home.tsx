@@ -694,7 +694,7 @@ function NavButton({
     <button
       type="button"
       onClick={onClick}
-      className={`flex h-9 w-full items-center gap-2 rounded-sm px-2 text-left text-sm transition ${
+      className={`flex h-9 w-full cursor-pointer items-center gap-2 rounded-sm px-2 text-left text-sm transition ${
         active ? 'bg-neutral-200 text-neutral-950' : 'text-neutral-950/75 hover:bg-neutral-100'
       }`}
     >
